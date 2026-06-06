@@ -8,8 +8,8 @@ export const LandingPage = () => {
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-slate-800">
       {/* Navbar */}
       <nav className="navbar bg-white sticky top-0 z-50 border-b border-slate-200 px-6 lg:px-20 h-16">
-        <div className="flex flex-nowrap h-full items-center justify-between w-full gap-6">
-          <div className="flex items-center flex-1 min-w-0">
+        <div className="flex h-full items-center justify-between w-full gap-6">
+          <div className="flex items-center flex-1">
             <Link to="/" className="flex items-center gap-2">
               <span className="font-extrabold text-2xl text-[#0052CC] tracking-tight">
                 UrbanMind
@@ -17,7 +17,7 @@ export const LandingPage = () => {
             </Link>
           </div>
 
-          <div className="hidden lg:flex flex-nowrap items-center justify-center flex-1 gap-6 text-sm font-bold text-slate-600 whitespace-nowrap">
+          <div className="hidden lg:flex items-center justify-center flex-1 gap-6 text-sm font-bold text-slate-600">
             <Link to="/" className="text-[#0052CC] border-b-2 border-[#0052CC] pb-1">Trang chủ</Link>
             <Link to="/login?redirect=/tickets/create" className="hover:text-slate-900 transition-colors">Gửi phản ánh</Link>
             <Link to="/login?redirect=/tickets" className="hover:text-slate-900 transition-colors">Phản ánh đã gửi</Link>
@@ -25,7 +25,7 @@ export const LandingPage = () => {
             <Link to="/analytics/sla" className="hover:text-slate-900 transition-colors">Báo cáo gần đây</Link>
           </div>
 
-          <div className="flex items-center justify-end flex-1 gap-3 min-w-0">
+          <div className="flex items-center justify-end flex-1 gap-3">
             <Link to="/login" className="btn btn-ghost btn-sm font-bold rounded-xl text-slate-600">
               Đăng nhập
             </Link>
