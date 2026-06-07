@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider } from './contexts/AuthContext';
 import { AppRoutes } from './routes/AppRoutes';
 import { mockDb } from './store/mockStore';
@@ -19,6 +20,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <SpeedInsights />
       </AuthProvider>
     </BrowserRouter>
   );
