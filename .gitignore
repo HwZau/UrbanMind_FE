@@ -9,7 +9,7 @@ node_modules/
 .pnp
 .pnp.js
 .yarn/install-state.gz
-
+.history/
 # ──────────────────────────────────
 # Build Outputs
 # ──────────────────────────────────
