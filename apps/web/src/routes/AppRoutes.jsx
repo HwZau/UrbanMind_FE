@@ -9,6 +9,7 @@ import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { LandingPage } from '../pages/LandingPage';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
+import { VerifyEmailPage } from '../pages/auth/VerifyEmailPage';
 import { Dashboard } from '../pages/dashboard/Dashboard';
 import { TicketListPage } from '../pages/tickets/TicketListPage';
 import { CreateTicketPage } from '../pages/tickets/CreateTicketPage';
@@ -52,6 +53,7 @@ export const AppRoutes = () => {
       <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route path="/about" element={<AboutPage />} />
 
       {/* Protected Pages (All Auth Roles) */}

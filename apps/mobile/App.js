@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { chatbotApi } from '@urbanmind/shared-api';
 
 export default function App() {
+  useEffect(() => {
+    console.log('Shared API layer initialized for mobile:', typeof chatbotApi.sendMessage === 'function');
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>UrbanMind Mobile App</Text>
