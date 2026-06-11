@@ -1,8 +1,31 @@
 // src/pages/auth/LoginPage.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import * as Lucide from 'lucide-react';
+
+const normalizeRole = (role) => {
+  if (!role) return role;
+  const normalized = String(role).trim().toLowerCase();
+  if (normalized === 'serviceuser' || normalized === 'service-user') return 'service-user';
+  if (normalized === 'systemstaff' || normalized === 'system-staff') return 'system-staff';
+  if (normalized === 'serviceprovider' || normalized === 'service-provider') return 'service-provider';
+  if (normalized === 'interactionmanager' || normalized === 'interaction-manager') return 'interaction-manager';
+  if (normalized === 'systemadmin' || normalized === 'admin' || normalized === 'administrator') return 'administrator';
+  return normalized;
+};
+
+const getRoleDashboard = (role) => {
+  const normalizedRole = normalizeRole(role);
+  const roleMap = {
+    'service-user': '/dashboard',
+    'system-staff': '/staff/queue',
+    'service-provider': '/provider/tasks',
+    'interaction-manager': '/manager/interactions',
+    'administrator': '/admin/audit',
+  };
+  return roleMap[normalizedRole] || '/dashboard';
+};
 
 export const LoginPage = () => {
   const { login } = useAuth();
@@ -23,8 +46,16 @@ export const LoginPage = () => {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
-      const redirect = searchParams.get('redirect') || '/dashboard';
+      const user = await login(email, password);
+      
+      // If email not verified, redirect to verification
+      if (!user.isVerified) {
+        navigate('/verify-email');
+        return;
+      }
+      
+      // Redirect to appropriate dashboard based on role
+      const redirect = searchParams.get('redirect') || getRoleDashboard(user.role);
       navigate(redirect);
     } catch (err) {
       setError(err.message || 'Đăng nhập thất bại.');
@@ -127,7 +158,6 @@ export const LoginPage = () => {
         {/* OAuth Buttons */}
         <button 
           type="button"
-          onClick={() => handleRoleSwitch('user@urbanmind.vn')} 
           className="btn btn-outline border-slate-300 hover:bg-slate-50 text-slate-700 w-full rounded-xl text-xs font-bold h-11 min-h-0 flex gap-2 justify-center items-center"
         >
           <img src="https://docs.kodular.io/guides/component-examples/google-sign-in/google.png" alt="Google logo" className="w-4 h-4 object-contain" />
@@ -148,10 +178,10 @@ export const LoginPage = () => {
             Đăng Nhập Nhanh Trải Nghiệm 14 Luồng
           </h4>
           <div className="grid grid-cols-2 gap-2 text-[9px] font-bold">
-            <button onClick={() => handleAutofill('user@urbanmind.vn')} className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-[#0052CC]">Người Dân (Resident)</button>
-            <button onClick={() => handleAutofill('staff@urbanmind.vn')} className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-info">Nhân Viên (Staff)</button>
-            <button onClick={() => handleAutofill('operator@urbanmind.vn')} className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-warning">Kỹ Thuật (Operator)</button>
-            <button onClick={() => handleAutofill('manager@urbanmind.vn')} className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-secondary">Quản Lý (Manager)</button>
+            <button onClick={() => handleAutofill('user@urbanmind.vn')} type="button" className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-[#0052CC]">Người Dân (Resident)</button>
+            <button onClick={() => handleAutofill('staff@urbanmind.vn')} type="button" className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-info">Nhân Viên (Staff)</button>
+            <button onClick={() => handleAutofill('operator@urbanmind.vn')} type="button" className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-warning">Kỹ Thuật (Operator)</button>
+            <button onClick={() => handleAutofill('manager@urbanmind.vn')} type="button" className="btn btn-xs btn-outline rounded-lg py-2 hover:bg-secondary">Quản Lý (Manager)</button>
           </div>
         </div>
       </div>

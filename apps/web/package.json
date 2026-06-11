@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@urbanmind/shared-api": "workspace:*",
+    "@urbanmind/shared-types": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
+    "axios": "^1.17.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",

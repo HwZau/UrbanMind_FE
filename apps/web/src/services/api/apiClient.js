@@ -1,27 +1,22 @@
 // src/services/api/apiClient.js
-import { tokenStorage } from '../storage/tokenStorage';
+import axiosClient from '../../api/axiosClient';
 
-// Simulated response latency in ms
-const LATENCY = 400;
+export const apiClient = axiosClient;
 
-export const apiClient = {
-  request(action, isPublic = false) {
+const originalRequest = axiosClient.request.bind(axiosClient);
+
+apiClient.request = (action) => {
+  if (typeof action === 'function') {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const token = tokenStorage.getToken();
-        
-        // Simulating JWT verification
-        if (!isPublic && !token) {
-          return reject({ status: 401, message: 'Unauthorized access. Token missing.' });
-        }
-        
-        try {
-          const result = action();
-          resolve(result);
-        } catch (error) {
-          reject({ status: 500, message: error.message || 'Server error' });
-        }
-      }, LATENCY);
+      try {
+        resolve(action());
+      } catch (error) {
+        reject(error);
+      }
     });
   }
+
+  return originalRequest(action);
 };
+
+export default apiClient;
