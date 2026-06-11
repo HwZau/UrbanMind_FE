@@ -88,11 +88,9 @@ export const AppRoutes = () => {
         </ProtectedRoute>
       } />
       <Route path="/community/feed" element={
-        <ProtectedRoute>
           <DashboardLayout>
             <CommunityFeedPage />
           </DashboardLayout>
-        </ProtectedRoute>
       } />
       <Route path="/community/map" element={
         <ProtectedRoute>

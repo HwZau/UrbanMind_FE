@@ -48,9 +48,11 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    const data = error?.response?.data;
     const message =
-      error?.response?.data?.message ||
-      error?.response?.data?.error ||
+      data?.msg ||
+      data?.message ||
+      data?.error ||
       error?.message ||
       'Unknown API error';
     return Promise.reject(new Error(message));

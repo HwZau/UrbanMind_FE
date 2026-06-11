@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import * as Lucide from 'lucide-react';
 
 export const AboutPage = () => {
+  const { user } = useAuth();
+  const isCitizen = user?.role === 'service-user';
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-slate-800">
       {/* Navbar */}
@@ -18,7 +22,9 @@ export const AboutPage = () => {
           <div className="hidden lg:flex flex-nowrap items-center justify-center flex-1 gap-6 text-sm font-bold text-slate-600 whitespace-nowrap">
             <Link to="/" className="hover:text-slate-900 transition-colors">Trang chủ</Link>
             <Link to="/login?redirect=/tickets/create" className="hover:text-slate-900 transition-colors">Gửi phản ánh</Link>
-            <Link to="/tickets" className="hover:text-slate-900 transition-colors">Phản ánh đã gửi</Link>
+            {isCitizen && (
+              <Link to="/tickets" className="hover:text-slate-900 transition-colors">Phản ánh đã gửi</Link>
+            )}
             <Link to="/community/feed" className="hover:text-slate-900 transition-colors">Tin tức gần đây</Link>
             <Link to="/about" className="text-[#0052CC] border-b-2 border-[#0052CC] pb-1">Giới thiệu</Link>
           </div>
