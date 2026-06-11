@@ -1,5 +1,4 @@
 // src/routes/AppRoutes.jsx
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ProtectedRoute } from '../guards/ProtectedRoute';
@@ -32,6 +31,7 @@ import { HelperWorkspacePage } from '../pages/community/HelperWorkspacePage';
 import { SLAAnalytics } from '../pages/analytics/SLAAnalytics';
 import { SentimentDashboard } from '../pages/analytics/SentimentDashboard';
 import { HeatmapDashboard } from '../pages/analytics/HeatmapDashboard';
+import { AboutPage } from '../pages/AboutPage';
 import { InteractionHistoryMonitoring } from '../pages/analytics/InteractionHistoryMonitoring';
 
 // Administrator Configuration Pages
@@ -52,6 +52,7 @@ export const AppRoutes = () => {
       <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/about" element={<AboutPage />} />
 
       {/* Protected Pages (All Auth Roles) */}
       <Route path="/dashboard" element={
