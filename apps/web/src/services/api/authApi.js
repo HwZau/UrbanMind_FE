@@ -1,5 +1,5 @@
 // src/services/api/authApi.js
-import { authApi as sharedAuthApi } from '@urbanmind/shared-api';
+import { apiClient } from './apiClient';
 import { tokenStorage } from '../storage/tokenStorage';
 
 const normalizeRole = (role) => {
@@ -13,89 +13,58 @@ const normalizeRole = (role) => {
   return normalized;
 };
 
+const saveUserSession = (response) => {
+  const token = response.token || response.data?.token;
+  const user = response.user || response.data || {};
+  const normalizedRole = normalizeRole(user.role);
+
+  if (token) {
+    tokenStorage.setToken(token);
+  }
+
+  const sessionUser = {
+    userId: user.userId,
+    email: user.email,
+    fullName: user.fullName,
+    role: normalizedRole,
+    isVerified: user.isVerified,
+  };
+
+  tokenStorage.setUser(sessionUser);
+  return {
+    token,
+    user: sessionUser,
+  };
+};
+
 export const authApi = {
   async login(email, password) {
-    const response = await sharedAuthApi.login(email, password);
-    const normalizedRole = normalizeRole(response.role);
-
-    tokenStorage.setToken(response.token);
-    tokenStorage.setUser({
-      userId: response.userId,
-      email: response.email,
-      fullName: response.fullName,
-      role: normalizedRole,
-      isVerified: response.isVerified,
-    });
-
-    return {
-      token: response.token,
-      user: {
-        userId: response.userId,
-        email: response.email,
-        fullName: response.fullName,
-        role: normalizedRole,
-        isVerified: response.isVerified,
-      },
-    };
+    const response = await apiClient.post('/api/auth/login', { email, password });
+    return saveUserSession(response);
   },
 
   async register(fullName, email, password, phone) {
-    const response = await sharedAuthApi.register(fullName, email, password, phone);
-    const normalizedRole = normalizeRole(response.role);
-
-    tokenStorage.setToken(response.token);
-    tokenStorage.setUser({
-      userId: response.userId,
-      email: response.email,
-      fullName: response.fullName,
-      role: normalizedRole,
-      isVerified: response.isVerified,
+    const response = await apiClient.post('/api/auth/register', {
+      fullName,
+      email,
+      password,
+      phone,
     });
-
-    return {
-      token: response.token,
-      user: {
-        userId: response.userId,
-        email: response.email,
-        fullName: response.fullName,
-        role: normalizedRole,
-        isVerified: response.isVerified,
-      },
-    };
+    return saveUserSession(response);
   },
 
   async googleLogin(idToken) {
-    const response = await sharedAuthApi.googleLogin(idToken);
-    const normalizedRole = normalizeRole(response.role);
-
-    tokenStorage.setToken(response.token);
-    tokenStorage.setUser({
-      userId: response.userId,
-      email: response.email,
-      fullName: response.fullName,
-      role: normalizedRole,
-      isVerified: response.isVerified,
-    });
-
-    return {
-      token: response.token,
-      user: {
-        userId: response.userId,
-        email: response.email,
-        fullName: response.fullName,
-        role: normalizedRole,
-        isVerified: response.isVerified,
-      },
-    };
+    const response = await apiClient.post('/api/auth/google-login', { idToken });
+    return saveUserSession(response);
   },
 
   async sendOTP() {
-    await sharedAuthApi.sendOtp();
+    await apiClient.post('/api/auth/email-verification/send-otp');
     return { success: true };
   },
 
   async verifyOTP(otp) {
-    await sharedAuthApi.verifyOtp(otp);
+    await apiClient.post('/api/auth/email-verification/verify', { otp });
 
     const user = tokenStorage.getUser();
     if (user) {
@@ -108,6 +77,7 @@ export const authApi = {
 
   async logout() {
     tokenStorage.clear();
+    await apiClient.post('/api/auth/logout');
     return { success: true };
   },
 
