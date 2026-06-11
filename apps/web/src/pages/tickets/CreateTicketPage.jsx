@@ -1,10 +1,10 @@
 // src/pages/tickets/CreateTicketPage.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ticketApi } from '../../services/api/ticketApi';
 import { mockDb } from '../../store/mockStore';
-import { MockMap } from '../../components/maps/MockMap';
+import { LocationPicker } from '../../components/maps/LocationPicker';
 import * as Lucide from 'lucide-react';
 
 export const CreateTicketPage = () => {
@@ -260,8 +260,12 @@ export const CreateTicketPage = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Map column */}
-            <div className="lg:col-span-2 border border-slate-200 rounded-3xl overflow-hidden shadow-xs h-96">
-              <MockMap isInteractive={true} onSelectLocation={handleLocationSelect} />
+            <div className="lg:col-span-2 border border-slate-200 rounded-3xl overflow-hidden shadow-xs">
+              <LocationPicker
+                latitude={latitude}
+                longitude={longitude}
+                onSelectLocation={handleLocationSelect}
+              />
             </div>
 
             {/* Coordinates HUD Column */}
