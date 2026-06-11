@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { ticketApi } from '../../services/api/ticketApi';
 import { signalrService } from '../../services/socket/signalrService';
 import { mockDb } from '../../store/mockStore';
+import { LocationPicker } from '../../components/maps/LocationPicker';
 import * as Lucide from 'lucide-react';
 
 export const TicketDetailPage = () => {
@@ -183,6 +184,26 @@ export const TicketDetailPage = () => {
           }`}>
             Trạng thái: {ticket.status}
           </span>
+        </div>
+      </div>
+
+      {/* Map Location Viewer */}
+      <div className="card bg-white border border-slate-200 p-6 rounded-3xl shadow-sm">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <h4 className="font-extrabold text-sm text-slate-900">Vị Trí Sự Cố</h4>
+              <p className="text-xs text-slate-500 font-semibold">Xem vị trí đã gửi trên bản đồ với chế độ chỉ xem.</p>
+            </div>
+            <span className="badge badge-sm bg-slate-100 text-slate-600 border border-slate-200 font-bold">Chỉ xem</span>
+          </div>
+          <LocationPicker
+            readonly
+            latitude={ticket.latitude}
+            longitude={ticket.longitude}
+            initialLatitude={ticket.latitude || 10.776530}
+            initialLongitude={ticket.longitude || 106.700981}
+          />
         </div>
       </div>
 

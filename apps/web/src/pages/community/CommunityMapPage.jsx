@@ -1,8 +1,10 @@
 // src/pages/community/CommunityMapPage.jsx
-import React from 'react';
-import { MockMap } from '../../components/maps/MockMap';
+import { mockDb } from '../../store/mockStore';
+import { LocationPicker } from '../../components/maps/LocationPicker';
 
 export const CommunityMapPage = () => {
+  const tickets = mockDb.getTickets().filter((ticket) => ticket.latitude && ticket.longitude);
+
   return (
     <div className="space-y-6">
       {/* Title */}
@@ -13,7 +15,12 @@ export const CommunityMapPage = () => {
 
       {/* Map card wrapper */}
       <div className="card bg-base-100 border border-base-300 p-4 rounded-3xl shadow-sm">
-        <MockMap isInteractive={false} />
+        <LocationPicker
+          readonly
+          initialLatitude={10.776530}
+          initialLongitude={106.700981}
+          markers={tickets}
+        />
       </div>
     </div>
   );
